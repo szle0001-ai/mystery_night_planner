@@ -26,13 +26,10 @@ const registerUser = async (req, res) => {
       [name, email, password_hash]
     );
 
-    res.status(201).json(result.rows[0]);
+    return res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error('REGISTER ERROR:', error);
-
-    res.status(500).json({
-      error: error.message,
-    });
+    return res.status(500).json({ error: error.message });
   }
 };
 
@@ -66,7 +63,7 @@ const loginUser = async (req, res) => {
       { expiresIn: '1d' }
     );
 
-    res.json({
+    return res.json({
       token,
       user: {
         id: user.id,
@@ -76,10 +73,7 @@ const loginUser = async (req, res) => {
     });
   } catch (error) {
     console.error('LOGIN ERROR:', error);
-
-    res.status(500).json({
-      error: error.message,
-    });
+    return res.status(500).json({ error: error.message });
   }
 };
 
