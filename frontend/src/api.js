@@ -1,28 +1,26 @@
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+
+const API_URL =
+  process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
 const parseResponse = async (res, defaultErrorMessage) => {
   const contentType = res.headers.get("content-type") || "";
 
-  let data;
-
   if (contentType.includes("application/json")) {
-    data = await res.json();
-  } else {
-    const text = await res.text();
-    throw new Error(
-      text || defaultErrorMessage || "Server returned a non-JSON response"
-    );
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || defaultErrorMessage || "Request failed");
+    }
+
+    return data;
   }
 
-  if (!res.ok) {
-    throw new Error(data.error || defaultErrorMessage || "Request failed");
-  }
-
-  return data;
+  const text = await res.text();
+  throw new Error(text || defaultErrorMessage || "Server returned a non-JSON response");
 };
 
 export const register = async (name, email, password) => {
-  const res = await fetch(${API_URL}/auth/register, {
+  const res = await fetch(`${API_URL}/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -34,7 +32,7 @@ export const register = async (name, email, password) => {
 };
 
 export const login = async (email, password) => {
-  const res = await fetch(${API_URL}/auth/login, {
+  const res = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -46,10 +44,10 @@ export const login = async (email, password) => {
 };
 
 export const getEvents = async (token) => {
-  const res = await fetch(${API_URL}/events, {
+  const res = await fetch(`${API_URL}/events`, {
     method: "GET",
     headers: {
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     }
   });
 
@@ -57,11 +55,11 @@ export const getEvents = async (token) => {
 };
 
 export const createEvent = async (eventData, token) => {
-  const res = await fetch(${API_URL}/events, {
+  const res = await fetch(`${API_URL}/events`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify(eventData)
   });
@@ -70,10 +68,10 @@ export const createEvent = async (eventData, token) => {
 };
 
 export const deleteEvent = async (eventId, token) => {
-  const res = await fetch(${API_URL}/events/${eventId}, {
+  const res = await fetch(`${API_URL}/events/${eventId}`, {
     method: "DELETE",
     headers: {
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     }
   });
 
@@ -81,10 +79,10 @@ export const deleteEvent = async (eventId, token) => {
 };
 
 export const getTasks = async (eventId, token) => {
-  const res = await fetch(${API_URL}/events/${eventId}/tasks, {
+  const res = await fetch(`${API_URL}/events/${eventId}/tasks`, {
     method: "GET",
     headers: {
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     }
   });
 
@@ -92,11 +90,11 @@ export const getTasks = async (eventId, token) => {
 };
 
 export const createTask = async (eventId, title, token) => {
-  const res = await fetch(${API_URL}/events/${eventId}/tasks, {
+  const res = await fetch(`${API_URL}/events/${eventId}/tasks`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify({
       title,
@@ -108,11 +106,11 @@ export const createTask = async (eventId, title, token) => {
 };
 
 export const updateTask = async (taskId, completed, token) => {
-  const res = await fetch(${API_URL}/tasks/${taskId}, {
+  const res = await fetch(`${API_URL}/tasks/${taskId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify({ completed })
   });
@@ -121,10 +119,10 @@ export const updateTask = async (taskId, completed, token) => {
 };
 
 export const deleteTask = async (taskId, token) => {
-  const res = await fetch(${API_URL}/tasks/${taskId}, {
+  const res = await fetch(`${API_URL}/tasks/${taskId}`, {
     method: "DELETE",
     headers: {
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     }
   });
 
@@ -132,10 +130,10 @@ export const deleteTask = async (taskId, token) => {
 };
 
 export const getAvailability = async (token) => {
-  const res = await fetch(${API_URL}/availability, {
+  const res = await fetch(`${API_URL}/availability`, {
     method: "GET",
     headers: {
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     }
   });
 
@@ -143,11 +141,11 @@ export const getAvailability = async (token) => {
 };
 
 export const createAvailability = async (data, token) => {
-  const res = await fetch(${API_URL}/availability, {
+  const res = await fetch(`${API_URL}/availability`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify(data)
   });
@@ -156,10 +154,10 @@ export const createAvailability = async (data, token) => {
 };
 
 export const deleteAvailability = async (id, token) => {
-  const res = await fetch(${API_URL}/availability/${id}, {
+  const res = await fetch(`${API_URL}/availability/${id}`, {
     method: "DELETE",
     headers: {
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     }
   });
 
@@ -167,10 +165,10 @@ export const deleteAvailability = async (id, token) => {
 };
 
 export const getFeedback = async (eventId, token) => {
-  const res = await fetch(${API_URL}/events/${eventId}/feedback, {
+  const res = await fetch(`${API_URL}/events/${eventId}/feedback`, {
     method: "GET",
     headers: {
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     }
   });
 
@@ -178,11 +176,11 @@ export const getFeedback = async (eventId, token) => {
 };
 
 export const createFeedback = async (eventId, data, token) => {
-  const res = await fetch(${API_URL}/events/${eventId}/feedback, {
+  const res = await fetch(`${API_URL}/events/${eventId}/feedback`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify(data)
   });
@@ -191,10 +189,10 @@ export const createFeedback = async (eventId, data, token) => {
 };
 
 export const deleteFeedback = async (feedbackId, token) => {
-  const res = await fetch(${API_URL}/feedback/${feedbackId}, {
+  const res = await fetch(`${API_URL}/feedback/${feedbackId}`, {
     method: "DELETE",
     headers: {
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     }
   });
 
